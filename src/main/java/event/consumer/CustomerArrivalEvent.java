@@ -14,32 +14,32 @@ public class CustomerArrivalEvent extends EventGenerator {
 
     public CustomerArrivalEvent(Integer currentTime, Integer lastCustomerId){
         Integer interArrival = findInterArrival();
-        this.id = lastCustomerId + 1;
-        this.time = interArrival + currentTime;
-        this.state = "Generated";
+        setId(lastCustomerId + 1);
+        setTime(interArrival + currentTime);
+        setState("generated");
     }
 
     @Override
     public void process(State state, FutureEventList futureEventList){
-        CustomerArrivalEvent nextArrivalEvent = new CustomerArrivalEvent(state.clock, this.id);
+        CustomerArrivalEvent nextArrivalEvent = new CustomerArrivalEvent(state.getClock(), this.getId());
         futureEventList.addEvent(nextArrivalEvent);
 
         if (Simulation.amountOfProduct > 0) {
             Simulation.amountOfProduct = Simulation.amountOfProduct - 1;
-            setNextEvent(new CartEvent(state.clock, this.id));
+            setNextEvent(new CartEvent(state.getClock(), this.getId()));
             futureEventList.addEvent(getNextEvent());
-            System.out.println(this.time + ", Id:" + this.id + ", State: Customer is GENERATED now will proceed CART");
+            System.out.println(this.getTime() + ", Id:" + this.getId() + ", State: Customer is GENERATED now will proceed CART");
         }
         else if (Simulation.queueCounter < Simulation.maxQueue){
             Simulation.queueCounter = Simulation.queueCounter + 1;
-            setNextEvent(new QueueEvent(state.clock, this.id));
+            setNextEvent(new QueueEvent(state.getClock(), this.getId()));
             futureEventList.addEvent(getNextEvent());
-            System.out.println(this.time + ", Id:" + this.id + ", State: Customer is GENERATED no item left queue is valid QUEUE");
+            System.out.println(this.getTime() + ", Id:" + this.getId() + ", State: Customer is GENERATED no item left queue is valid QUEUE");
         }
         else {
-            state.addCustomer(this.id);
-            this.state = "fail";
-            System.out.println(this.time + ", Id:" + this.id + ", State: Customer is GENERATED no item left queue is full FAIL");
+            state.addCustomer(this.getId());
+            setState("fail");
+            System.out.println(this.getTime() + ", Id:" + this.getId() + ", State: Customer is GENERATED no item left queue is full FAIL");
         }
     }
 

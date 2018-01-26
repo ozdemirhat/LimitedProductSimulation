@@ -10,7 +10,7 @@ import java.util.Collections;
  * Created by hatice.ozdemir on 27.12.2017.
  */
 public class FutureEventList {
-    ArrayList<EventGenerator> futureEventList;
+    private ArrayList<EventGenerator> futureEventList;
 
     public FutureEventList(){
         this.futureEventList = new ArrayList<EventGenerator>();

@@ -5,7 +5,7 @@ package product;
  */
 public class InternalProduct extends Product {
     public InternalProduct(){
-        description = "InternalProduct";
+        setDescription("InternalProduct");
     }
     public  double cost(){
         return 12.0;

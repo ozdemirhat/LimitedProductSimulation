@@ -11,8 +11,6 @@ import employee.OperatorEmployee;
 public class RequestChain {
 
     public  static AbstractEmployee getRequestChain(){
-
-
         AbstractEmployee operatorEmployee = new OperatorEmployee("operator");
         AbstractEmployee internalEmployee = new InternalEmployee("internal");
         AbstractEmployee externalEmployee = new ExternalEmployee("external");

@@ -14,27 +14,27 @@ public class QueueEvent extends EventGenerator {
 
     public QueueEvent (Integer currentTime, Integer lastCustomerId){
         Integer interArrival = findInterArrival();
-        this.id = lastCustomerId;
-        this.time = interArrival + currentTime;
-        this.state = "queue";
+        setId(lastCustomerId);
+        setTime(interArrival + currentTime);
+        setState("queue");
     }
 
     @Override
     public void process(State state, FutureEventList futureEventList){
 
         if (Simulation.amountOfProduct > 0) {
-            setNextEvent(new CartEvent(state.clock, this.id));
+            setNextEvent(new CartEvent(state.getClock(), this.getId()));
             futureEventList.addEvent(getNextEvent());
             Simulation.amountOfProduct = Simulation.amountOfProduct - 1;
             Simulation.queueCounter = Simulation.queueCounter - 1;
-            System.out.println(this.time + ", Id:" + this.id + ", State: Customer waited in QUEUE now will proceed CART");
+            System.out.println(this.getTime() + ", Id:" + this.getId() + ", State: Customer waited in QUEUE now will proceed CART");
         }
 
         else{
-            state.addCustomer(this.id);
-            this.state = "fail";
+            state.addCustomer(this.getId());
+            setState("fail");
             Simulation.queueCounter = Simulation.queueCounter - 1;
-            System.out.println(this.time + ", Id:" + this.id + ", State: Customer waited in QUEUE still no item left FAIL");
+            System.out.println(this.getTime() + ", Id:" + this.getId() + ", State: Customer waited in QUEUE still no item left FAIL");
         }
     }
 

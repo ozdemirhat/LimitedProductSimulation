@@ -7,10 +7,10 @@ import simulation.State;
  * Created by hatice.ozdemir on 27.12.2017.
  */
 public abstract class EventGenerator {
-    public Integer time;
-    public Integer id;
-    public String state;
-    EventGenerator nextEvent;
+    private Integer time;
+    private Integer id;
+    private String state;
+    private EventGenerator nextEvent;
 
     public Integer getTime(){return time;}
     public Integer getId(){return id;}

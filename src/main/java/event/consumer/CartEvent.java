@@ -20,14 +20,14 @@ import java.util.Random;
  */
 
 public class CartEvent extends EventGenerator {
-    public AbstractEmployee abstactEmployee;
+    private AbstractEmployee abstractEmployee;
 
     public CartEvent(Integer currentTime, Integer lastCustomerId){
         Integer interArrival = findInterArrival();
-        this.id = lastCustomerId;
-        this.time = interArrival + currentTime;
-        this.state = "cart";
-        this.abstactEmployee =  RequestChain.getRequestChain();
+        setId(lastCustomerId);
+        setTime(interArrival + currentTime);
+        setState("cart");
+        this.abstractEmployee =  RequestChain.getRequestChain();
     }
 
     @Override
@@ -35,9 +35,9 @@ public class CartEvent extends EventGenerator {
         Double random = Math.random();
 
         if (random < 0.7){
-            state.addCustomer(this.id);
-            this.state = "success";
-            System.out.println(this.time + ", Id:" + this.id + ", State: Customer has PURCHASED item SUCCESS");
+            state.addCustomer(this.getId());
+            setState("success");
+            System.out.println(this.getTime() + ", Id:" + this.getId() + ", State: Customer has PURCHASED item SUCCESS");
             Product product = Simulation.productList.get(0);
             Simulation.productList.remove(Simulation.productList.get(0));
             decorator(product);
@@ -46,10 +46,10 @@ public class CartEvent extends EventGenerator {
             }
         }
         else{
-            state.addCustomer(this.id);
-            this.state = "fail";
+            state.addCustomer(this.getId());
+            setState("fail");
             Simulation.amountOfProduct = Simulation.amountOfProduct + 1;
-            System.out.println(this.time + ", Id:" + this.id + ", State: Customer has CHANGED his mind FAIL");
+            System.out.println(this.getTime() + ", Id:" + this.getId() + ", State: Customer has CHANGED his mind FAIL");
         }
     }
 
@@ -73,20 +73,20 @@ public class CartEvent extends EventGenerator {
         else if (random < 0.5){
             product = new Shirt(product);
         }
-        System.out.println("User " + this.id + " purchased " + product.getDescription() + " item cost: " + product.cost() + " " + Simulation.amountOfProduct + " item left");
+        System.out.println("User " + this.getId() + " purchased " + product.getDescription() + " item cost: " + product.cost() + " " + Simulation.amountOfProduct + " item left");
     }
 
     public void orderProduct(State state, FutureEventList futureEventList){
         Double random = Math.random();
         if (random < 0.8){
-            setNextEvent(new InternalProductOrderEvent(state.clock, this.abstactEmployee));
+            setNextEvent(new InternalProductOrderEvent(state.getClock(), this.abstractEmployee));
             futureEventList.addEvent(getNextEvent());
-            System.out.println(this.time + ", State: Internal product is ORDERED");
+            System.out.println(this.getTime() + ", State: Internal product is ORDERED");
         }
         else {
-            setNextEvent(new ExternalProductOrderEvent(state.clock, this.abstactEmployee));
+            setNextEvent(new ExternalProductOrderEvent(state.getClock(), this.abstractEmployee));
             futureEventList.addEvent(getNextEvent());
-            System.out.println(this.time + ", State: External product is ORDERED");
+            System.out.println(this.getTime() + ", State: External product is ORDERED");
         }
     }
 

@@ -15,14 +15,14 @@ import java.util.Random;
 
 public class InternalProductOrderEvent extends EventGenerator {
 
-    public AbstractEmployee abstactEmployee;
+    private AbstractEmployee abstactEmployee;
 
     public InternalProductOrderEvent(Integer currentTime, AbstractEmployee abstactEmployee){
 
         this.abstactEmployee = abstactEmployee;
 
         Integer interArrival = findInterArrival();
-        this.time = interArrival + currentTime;
+        this.setTime(interArrival + currentTime);
 
         abstactEmployee.requestItem("internal", "New Internal Product Request is Generated");
     }
@@ -31,7 +31,7 @@ public class InternalProductOrderEvent extends EventGenerator {
     public void process(State state, FutureEventList futureEventList){
         Simulation.productList.add(new InternalProduct());
         Simulation.amountOfProduct = Simulation.amountOfProduct + 1;
-        System.out.println(this.time + ", State: INTERNAL product has ARRIVED");
+        System.out.println(this.getTime() + ", State: INTERNAL product has ARRIVED");
     }
 
     @Override
