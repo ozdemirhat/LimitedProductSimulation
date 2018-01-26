@@ -37,17 +37,19 @@ public class CartEvent extends EventGenerator {
         if (random < 0.7){
             state.addCustomer(this.getId());
             setState("success");
+            state.setNumberOfSuccess(state.getNumberOfSuccess() + 1);
             System.out.println(this.getTime() + ", Id:" + this.getId() + ", State: Customer has PURCHASED item SUCCESS");
             Product product = Simulation.productList.get(0);
             Simulation.productList.remove(Simulation.productList.get(0));
             decorator(product);
-            if (Simulation.amountOfProduct < 2){
+            if (Simulation.amountOfProduct < Simulation.orderThreshold){
                 orderProduct(state, futureEventList);
             }
         }
         else{
             state.addCustomer(this.getId());
             setState("fail");
+            state.setNumberOfFails(state.getNumberOfFails() + 1);
             Simulation.amountOfProduct = Simulation.amountOfProduct + 1;
             System.out.println(this.getTime() + ", Id:" + this.getId() + ", State: Customer has CHANGED his mind FAIL");
         }

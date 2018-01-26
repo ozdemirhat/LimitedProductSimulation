@@ -1,17 +1,10 @@
 package simulation;
 
 
-import event.consumer.CustomerArrivalEvent;
 import event.EventGenerator;
-import employee.AbstractEmployee;
-import event.generator.ExternalProductOrderEvent;
-import event.generator.InternalProductOrderEvent;
-import product.ExternalProduct;
+import event.consumer.CustomerArrivalEvent;
 import product.InternalProduct;
 import product.Product;
-import product.combine.Shirt;
-import product.combine.Shoe;
-import product.combine.Skirt;
 
 import java.util.ArrayList;
 
@@ -21,40 +14,46 @@ import java.util.ArrayList;
 public class Simulation {
     public static Integer customerArrivalX;
     public static Integer customerArrivalY;
-
     public static Integer internalProductOrderX;
     public static Integer internalProductOrderY;
     public static Integer externalProductOrderX;
     public static Integer externalProductOrderY;
-
     public static Integer customerQueueX;
     public static Integer customerQueueY;
-
     public static Integer cartWaitTime;
     public static Integer amountOfProduct;
     public static Integer maxQueue;
     public static Integer queueCounter;
+    public static Integer orderThreshold;
+
+    private Integer totalNumberOfCustomers;
 
     public static ArrayList<Product> productList;
 
 
-    public Simulation(Integer customerArrivalX, Integer customerArrivalY, Integer customerQueueX, Integer customerQueueY, Integer amountOfProduct, Integer maxQueue, Integer cartWaitTime, Integer internalProductOrderX, Integer internalProductOrderY, Integer externalProductOrderX, Integer externalProductOrderY){
-        this.customerArrivalX = customerArrivalX;
-        this.customerArrivalY = customerArrivalY;
+    public Simulation(){
 
-        this.internalProductOrderX = internalProductOrderX;
-        this.internalProductOrderY = internalProductOrderY;
-        this.externalProductOrderX = externalProductOrderX;
-        this.externalProductOrderY = externalProductOrderY;
+        //Inter arrival parameters
+        this.customerArrivalX = 0;
+        this.customerArrivalY = 60;
+        this.customerQueueX = 5;
+        this.customerQueueY = 15;
+        this.internalProductOrderX = 50;
+        this.internalProductOrderY = 100;
+        this.externalProductOrderX = 100;
+        this.externalProductOrderY = 150;
 
-        this.customerQueueX = customerQueueX;
-        this.customerQueueY = customerQueueY;
+        //Other parameters
+        this.amountOfProduct = 10;
+        this.maxQueue = 5;
+        this.cartWaitTime = 15;
+        this.orderThreshold = 5;
+        this.totalNumberOfCustomers = 100;
 
-        this.amountOfProduct = amountOfProduct;
-        this.maxQueue = maxQueue;
+
+        //Counters and lists
+        this.productList = new ArrayList<>();
         this.queueCounter = 0;
-        this.cartWaitTime = cartWaitTime;
-        this.productList = new ArrayList<Product>();
     }
 
     public void simulate() {
@@ -69,11 +68,14 @@ public class Simulation {
         CustomerArrivalEvent customerArrivalEvent = new CustomerArrivalEvent(0, 0);
         fel.addEvent(customerArrivalEvent);
 
-        while (fel.nextEventTime() != -1 && state.getTotalCustomerIdList().size() < 50){
+        while (fel.nextEventTime() != -1 && state.getTotalCustomerIdList().size() < totalNumberOfCustomers){
             state.setClock(fel.nextEventTime());
             EventGenerator currentEvent = fel.popEvent();
             currentEvent.process(state, fel);
         }
+        System.out.println("--------RESULTS--------");
+        System.out.println("Number of Success: " + state.getNumberOfSuccess());
+        System.out.println("Number of Fails: " + state.getNumberOfFails());
 
     }
 

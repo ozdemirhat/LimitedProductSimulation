@@ -33,6 +33,7 @@ public class QueueEvent extends EventGenerator {
         else{
             state.addCustomer(this.getId());
             setState("fail");
+            state.setNumberOfFails(state.getNumberOfFails() + 1);
             Simulation.queueCounter = Simulation.queueCounter - 1;
             System.out.println(this.getTime() + ", Id:" + this.getId() + ", State: Customer waited in QUEUE still no item left FAIL");
         }
